@@ -9,10 +9,13 @@
     <title>My blog</title>
 </head>
 <body>
-<article>
-    <?= $post; ?>
 
-    <a href="/posts">Go back</a>
+<article>
+    <h1><?= $post->title; ?></h1>
+
+    <div>
+        <?= $post->body; ?>
+    </div>
 </article>
 </body>
 </html>

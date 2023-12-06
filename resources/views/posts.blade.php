@@ -9,16 +9,20 @@
     <title>My blog</title>
 </head>
 <body>
-    <article>
-        <h1><a href="/posts/my-first-post">My first post</a></h1>
-    </article>
+<?php foreach ($posts as $post) : ?>
+<article>
+    <h1>
+        <a href="/posts/<?= $post->slug; ?>">
+            <?= $post->title; ?>
+        </a>
 
-    <article>
-        <h1><a href="/posts/my-second-post">My second post</a></h1>
-    </article>
 
-    <article>
-        <h1><a href="/posts/my-third-post">My third post</a></h1>
-    </article>
+    </h1>
+
+    <div>
+            <?= $post->excerpt; ?>
+    </div>
+</article>
+<?php endforeach; ?>
 </body>
 </html>

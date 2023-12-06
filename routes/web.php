@@ -2,7 +2,6 @@
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,13 +15,10 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
-
-    YamlFrontMatter::parseFile(resource_path('posts/my-fourth-post.html'));
     return view('posts', [ 'posts' => Post::all()]);
 });
-Route::get('posts/{slug}', function ($slug) {
-    $post = Post::Find($slug);
 
-    return view('post', [ 'post' => $post ]);
+Route::get('posts/{slug}', function ($slug) {
+    return view('post', [ 'post' => Post::Find($slug)]);
 })->where('post', '[A-z_\-]+');
 
