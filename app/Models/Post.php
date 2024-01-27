@@ -24,4 +24,15 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    // scopeSearchFilter is a query scope that can be used to filter the posts by title or body
+    // the scopeSearchFilter is called in the PostsController, scope is a prefix translated automatically by laravel
+    public function scopeSearchFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, fn($query, $search) => $query
+            ->where('title', 'like', '%'.$search.'%')
+            ->orWhere('body', 'like', '%'.$search.'%'));
+
+    }
 }
+
