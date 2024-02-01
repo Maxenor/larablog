@@ -33,6 +33,9 @@ class Post extends Model
             ->where('title', 'like', '%'.$search.'%')
             ->orWhere('body', 'like', '%'.$search.'%'));
 
+        // the query will search the category table for the slug column that matches the category filter
+        $query->when($filters['category'] ?? false, fn($query, $category) => $query
+            ->whereHas('category', fn($query) => $query
+                ->where('slug', $category)));
     }
 }
-
