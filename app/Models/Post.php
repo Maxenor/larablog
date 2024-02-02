@@ -38,9 +38,25 @@ class Post extends Model
             ->whereHas('category', fn($query) => $query
                 ->where('slug', $category)));
 
-        // make a query like above to filter the posts by author
+        $query->when($filters['author'] ?? false, fn($query, $author) => $query
+            ->whereHas('author', fn($query) => $query
+                ->where('username', $author)));
+    }
+
+    public function scopeSearchFilter2($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false,
+            fn($query, $search) => $query->where(fn($query) => $query->where('title', 'like', '%'.$search.'%')
+                ->orWhere('body', 'like', '%'.$search.'%')));
+
+        // the query will search the category table for the slug column that matches the category filter
+        $query->when($filters['category'] ?? false, fn($query, $category) => $query
+            ->whereHas('category', fn($query) => $query
+                ->where('slug', $category)));
+
         $query->when($filters['author'] ?? false, fn($query, $author) => $query
             ->whereHas('author', fn($query) => $query
                 ->where('username', $author)));
     }
 }
+// what is the difference between the two scopeSearchFilter methods?

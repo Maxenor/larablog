@@ -13,9 +13,15 @@
     </x-dropdown-item>
 
     @foreach($categories as $category)
-        <x-dropdown-item href="/?category={{ $category->slug }}"
+        <x-dropdown-item href="/?category={{ $category->slug }}&{{ http_build_query(request()->except('category')) }}"
                          :active='request()->is("categories/$category->slug")'>
             {{ucwords($category->name)}}
         </x-dropdown-item>
     @endforeach
 </x-dropdown>
+{{--// what does http_build_query do?--}}
+{{--// It takes an array and converts it into a query string.--}}
+{{--// For example, if you have an array like this:--}}
+{{--// ['category' => 'foo', 'author' => 'bar']--}}
+{{--// It will convert it into a string like this:--}}
+{{--// category=foo&author=bar--}}
