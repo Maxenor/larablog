@@ -29,27 +29,11 @@ class Post extends Model
     // the scopeSearchFilter is called in the PostsController, scope is a prefix translated automatically by laravel
     public function scopeSearchFilter($query, array $filters)
     {
-        $query->when($filters['search'] ?? false, fn($query, $search) => $query
-            ->where('title', 'like', '%'.$search.'%')
-            ->orWhere('body', 'like', '%'.$search.'%'));
-
-        // the query will search the category table for the slug column that matches the category filter
-        $query->when($filters['category'] ?? false, fn($query, $category) => $query
-            ->whereHas('category', fn($query) => $query
-                ->where('slug', $category)));
-
-        $query->when($filters['author'] ?? false, fn($query, $author) => $query
-            ->whereHas('author', fn($query) => $query
-                ->where('username', $author)));
-    }
-
-    public function scopeSearchFilter2($query, array $filters)
-    {
+        // first search for the title or body of the post and then search for the rest
         $query->when($filters['search'] ?? false,
             fn($query, $search) => $query->where(fn($query) => $query->where('title', 'like', '%'.$search.'%')
                 ->orWhere('body', 'like', '%'.$search.'%')));
 
-        // the query will search the category table for the slug column that matches the category filter
         $query->when($filters['category'] ?? false, fn($query, $category) => $query
             ->whereHas('category', fn($query) => $query
                 ->where('slug', $category)));
@@ -59,4 +43,3 @@ class Post extends Model
                 ->where('username', $author)));
     }
 }
-// what is the difference between the two scopeSearchFilter methods?
