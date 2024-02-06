@@ -10,7 +10,10 @@ class PostsController extends Controller
     {
         return view('posts.index',
             [
-                'posts' => Post::latest()->SearchFilter(request(['search', 'category', 'author']))->get(),
+                // withQueryString() is used to keep the query string in the pagination links
+                'posts' => Post::latest()->SearchFilter(request([
+                    'search', 'category', 'author'
+                ]))->paginate(6)->withQueryString()
 
             ]);
     }
