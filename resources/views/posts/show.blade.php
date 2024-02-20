@@ -46,12 +46,45 @@
                         {!! $post->body !!}
                     </div>
                 </div>
-                <section class="col-span-8 col-start-5 mt-10 space-y-5">
-                    <x-post-comment/>
-                    <x-post-comment/>
-                    <x-post-comment/>
-                    <x-post-comment/>
-                    <x-post-comment/>
+
+                <section id="comments" class="col-span-8 col-start-5 mt-10 space-y-5">
+                    <x-panel>
+                        <form method="POST" action="/posts/{{ $post->slug }}"
+                              class="flex flex-col">
+                            @csrf
+                            <header class="flex items-center">
+                                <img src="https://i.pravatar.cc/60?u={{ auth()->id() }}" alt="" width="40" height="40"
+                                     class="rounded-xl">
+                                <h2 class="ml-4">Want
+                                    to participate?</h2>
+                            </header>
+                            <div class="mt-6">
+                                <textarea name="body" id="body"
+                                          class="w-full text-sm focus:outline-none focus:ring rounded-xl border border-gray-200 p-2"
+                                          rows="5" placeholder="Quick, think of something to say!"></textarea>
+                                @error('body')
+                                <span class="text-xs text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            @auth
+                                <div class="flex justify-end mt-6">
+                                    <x-primary-button>Post</x-primary-button>
+                                </div>
+                            @else
+                                <p class="font-semibold">
+                                    <a href="/register" class="hover:underline">Register</a> or <a href="/login"
+                                                                                                   class="hover:underline">
+                                        Log in</a> to leave a comment
+                                </p>
+                            @endauth
+                        </form>
+
+                    </x-panel>
+
+
+                    @foreach($post->comments as $comment)
+                        <x-post-comment :comment="$comment"/>
+                    @endforeach
                 </section>
             </article>
         </main>

@@ -1,20 +1,20 @@
-<article class="flex bg-gray-100 p-6 border border-gray-200 rounded-xl space-x-4">
-    <div class="flex-shrink-0">
-        <img src="https://i.pravatar.cc/60" alt="" width="60" height="60" class="rounded-xl">
-    </div>
+@props(['comment'])
+<x-panel class="bg-gray-100">
+    <article class="flex space-x-4">
+        <div class="flex-shrink-0">
+            <img src="https://i.pravatar.cc/60?u={{ $comment->id }}" alt="" width="60" height="60" class="rounded-xl">
+        </div>
 
-    <div>
-        <header>
-            <h3 class="font-bold">John Doe</h3>
-            <p class="text-xs">Posted
-                <time>8 months ago</time>
+        <div>
+            <header>
+                <h3 class="font-bold">{{ $comment->author->username }}</h3>
+                <p class="text-xs">Posted
+                    <time>{{ $comment->created_at->diffForHumans() }}</time>
+                </p>
+            </header>
+            <p>
+                {{ $comment->body }}
             </p>
-        </header>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci alias aliquid
-            architecto
-            aspernatur atque autem, beatae, consectetur consequatur corporis cumque delectus
-            doloremquz
-        </p>
-    </div>
-</article>
+        </div>
+    </article>
+</x-panel>

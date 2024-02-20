@@ -29,4 +29,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::post('posts/{post:slug}', [PostsController::class, 'storeComment'])->name('comment.store');
+
 require __DIR__.'/auth.php';
