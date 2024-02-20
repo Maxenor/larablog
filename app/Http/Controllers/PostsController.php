@@ -22,20 +22,4 @@ class PostsController extends Controller
     {
         return view('posts.show', ['post' => $post]);
     }
-
-// make the function to store the comment
-    public function storeComment(Post $post)
-    {
-        request()->validate([
-            'body' => 'required'
-        ]);
-
-        $post->comments()->create([
-            'user_id' => auth()->id(),
-            'body' => request('body')
-        ]);
-
-        return redirect()->to(url()->previous().'#comments');
-
-    }
 }

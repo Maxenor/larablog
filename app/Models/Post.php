@@ -11,8 +11,6 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-
     // eager loading relationships on models or queries
     protected $with = ['category', 'author'];
 
