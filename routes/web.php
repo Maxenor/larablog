@@ -4,6 +4,8 @@ use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
+use MailchimpMarketing\ApiClient;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +33,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('posts/{post:slug}/comments', [PostCommentsController::class, 'storeComment'])->name('comment.store');
+Route::get('ping', function () {
+    $mailchimp = new ApiClient();
+
+    $mailchimp->setConfig([
+        'apiKey' => config('services.mailchimp.key'),
+        'server' => 'us10'
+    ]);
+
+    $response = $mailchimp->lists->getListMembersInfo('2b858505db');
+    dd($response);
+});
+
+Route::post('newsletter', function () {
+    request()->validate([
+        'email' => 'required|email'
+    ]);
+    $mailchimp = new ApiClient();
+
+    $mailchimp->setConfig([
+        'apiKey' => config('services.mailchimp.key'),
+        'server' => 'us10'
+    ]);
+
+    try {
+        $response = $mailchimp->lists->addListMember('2b858505db', [
+            'email_address' => request('email'),
+            'status' => 'subscribed'
+        ]);
+    } catch (Exception $e) {
+        throw ValidationException::withMessages(['failure' => 'This email could not be added to our newsletter list.']);
+    }
+
+    return redirect('/#newsletter')->with('success', 'You are now signed up for our newsletter!');
+})->name('newsletter');
+
 
 require __DIR__.'/auth.php';
