@@ -18,16 +18,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PostsController::class, 'index'])->name('home');
+
 Route::get('posts/{post:slug}', [PostsController::class, 'show'])->name('post');
 
 Route::post('posts/{post:slug}/comments', [PostCommentsController::class, 'storeComment'])->name('comment.store');
+
+Route::get('admin/posts/create', [PostsController::class, 'create'])->middleware('admin')->name('post.create');
+Route::post('admin/posts', [PostsController::class, 'store'])->middleware('admin')->name('post.store');
 
 Route::post('newsletter', NewsletterController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

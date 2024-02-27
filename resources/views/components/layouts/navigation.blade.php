@@ -41,10 +41,6 @@
 
                     <x-slot name="slot">
                         @auth()
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
-
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -66,6 +62,10 @@
                     <div class="flex items-center">
                         <div>{{ Auth::user()->username }}</div>
                     </div>
+                @else
+                    <x-dropdown-link :href="route('login')">
+                        {{ __('Log in') }}
+                    </x-dropdown-link>
                 @endauth
             </div>
 

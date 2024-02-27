@@ -22,4 +22,25 @@ class PostsController extends Controller
     {
         return view('posts.show', ['post' => $post]);
     }
+
+    public function store()
+    {
+        $attributes = request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required',
+            'category_id' => ['required', 'exists:categories,id']
+        ]);
+
+        $attributes['user_id'] = auth()->id();
+
+        Post::create($attributes);
+
+        return redirect('/');
+    }
+
+    public function create()
+    {
+        return view('posts.create');
+    }
 }
